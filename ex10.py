@@ -38,8 +38,17 @@ fig2 = px.bar(filtered_df, x="Técnica de Cultivo", y="Volumen de Producción", 
 fig3 = px.bar(df.groupby("Género").agg({"Volumen de Producción": "mean"}).reset_index(), x="Género", y="Volumen de Producción",
               title="Promedio de Volumen de Producción por Género")
 
-# Mostrar los gráficos
+# Crear una fila de columnas para los gráficos de barras
+col1, col2 = st.columns(2)
+
+# Mostrar los gráficos de barras en las dos columnas
+with col1:
+    st.plotly_chart(fig2, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig3, use_container_width=True)
+
+# Mostrar el gráfico de dispersión debajo
 st.plotly_chart(fig1, use_container_width=True)
-st.plotly_chart(fig2, use_container_width=True)
-st.plotly_chart(fig3, use_container_width=True)
+
 
