@@ -23,8 +23,11 @@ df = pd.DataFrame(data)
 # Título de la aplicación
 st.title("📊 Dashboard de Producción Agrícola")
 
-# Usar todos los datos (sin filtro de año)
-filtered_df = df
+# Crear un slider para seleccionar el campesino
+campesino_seleccionado = st.selectbox('Selecciona el campesino asociado', df['Campesino Asociado'].unique())
+
+# Filtrar los datos según el campesino seleccionado
+filtered_df = df[df['Campesino Asociado'] == campesino_seleccionado]
 
 # Crear un gráfico de dispersión
 fig1 = px.scatter(filtered_df, x="Edad", y="Volumen de Producción", color="Técnica de Cultivo",
