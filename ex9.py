@@ -15,11 +15,6 @@ agg_by_year = df.groupby("model_year").agg({"horsepower": "mean"}).reset_index()
 # Streamlit App Title
 st.title("📊 Dashboard Interactivo con Múltiples Gráficos - Análisis de Autos")
 
-# Crear un filtro en el sidebar para seleccionar el año de modelo (model_year)
-selected_year = st.sidebar.slider("Selecciona un Año de Modelo:", int(df["model_year"].min()), int(df["model_year"].max()), int(df["model_year"].min()), step=1)
-
-# Filtrar los datos según el año seleccionado
-filtered_df = df[df["model_year"] == selected_year]
 
 # Crear tres gráficos diferentes
 # Gráfico 1: Relación entre el peso y las millas por galón, coloreado por origen
