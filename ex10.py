@@ -23,24 +23,25 @@ df = pd.DataFrame(data)
 # Título de la aplicación
 st.title("📊 Dashboard de Producción Agrícola")
 
-# Crear un slider para seleccionar el campesino
-campesino_seleccionado = st.selectbox('Selecciona el campesino asociado', df['Campesino Asociado'].unique())
+# Crear un slider para seleccionar entre campesino o género
+filtro = st.selectbox('Selecciona el filtro para mostrar los datos', ['Campesino Asociado', 'Género'])
 
-# Crear un slider para seleccionar el año
-año_seleccionado = st.slider('Selecciona el año', min_value=df['Año'].min(), max_value=df['Año'].max(), value=df['Año'].min(), step=1)
+if filtro == 'Campesino Asociado':
+    filtro_seleccionado = st.selectbox('Selecciona el campesino asociado', df['Campesino Asociado'].unique())
+    filtered_df = df[df['Campesino Asociado'] == filtro_seleccionado]
+else:
+    filtro_seleccionado = st.selectbox('Selecciona el género', df['Género'].unique())
+    filtered_df = df[df['Género'] == filtro_seleccionado]
 
-# Filtrar los datos según el campesino y el año seleccionado
-filtered_df = df[(df['Campesino Asociado'] == campesino_seleccionado) & (df['Año'] == año_seleccionado)]
-
-# Crear un gráfico de dispersión (Edad vs Volumen de Producción)
+# Crear un gráfico de dispersión (Volumen de Producción vs Edad)
 fig1 = px.scatter(filtered_df, x="Edad", y="Volumen de Producción", color="Técnica de Cultivo",
-                  hover_name="Campesino Asociado", title=f"Volumen de Producción vs Edad del Campesino ({campesino_seleccionado})")
+                  hover_name="Campesino Asociado", title=f"Volumen de Producción vs Edad del {filtro_seleccionado}")
 
 # Crear un gráfico de barras (Técnica de Cultivo vs Volumen de Producción)
 fig2 = px.bar(filtered_df, x="Técnica de Cultivo", y="Volumen de Producción", color="Técnica de Cultivo",
-              title=f"Volumen de Producción por Técnica de Cultivo ({campesino_seleccionado})")
+              title=f"Volumen de Producción por Técnica de Cultivo ({filtro_seleccionado})")
 
-# Crear un gráfico de dispersión (Año vs Volumen de Producción)
+# Crear un gráfico de dispersión (Volumen de Producción vs Año)
 fig3 = px.scatter(df, x="Año", y="Volumen de Producción", color="Técnica de Cultivo",
                   title="Volumen de Producción por Año", labels={"Año": "Año de Producción"})
 
@@ -54,6 +55,7 @@ with col1:
 with col2:
     st.plotly_chart(fig3, use_container_width=True)
 
-# Mostrar el gráfico de dispersión (Edad vs Volumen de Producción) debajo
+# Mostrar el gráfico de dispersión (Volumen de Producción vs Edad) debajo
 st.plotly_chart(fig1, use_container_width=True)
+
 
