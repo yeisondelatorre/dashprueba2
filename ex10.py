@@ -23,39 +23,28 @@ df = pd.DataFrame(data)
 # Título de la aplicación
 st.title("📊 Dashboard de Producción Agrícola")
 
-# Crear un slider para seleccionar entre campesino o género
-filtro = st.selectbox('Selecciona el filtro para mostrar los datos', ['Campesino Asociado', 'Género'])
+# Crear un slider para seleccionar el género
+genero_seleccionado = st.selectbox('Selecciona el género', df['Género'].unique())
 
-if filtro == 'Campesino Asociado':
-    filtro_seleccionado = st.selectbox('Selecciona el campesino asociado', df['Campesino Asociado'].unique())
-    filtered_df = df[df['Campesino Asociado'] == filtro_seleccionado]
-else:
-    filtro_seleccionado = st.selectbox('Selecciona el género', df['Género'].unique())
-    filtered_df = df[df['Género'] == filtro_seleccionado]
+# Crear un slider para seleccionar la técnica de cultivo
+tecnica_seleccionada = st.selectbox('Selecciona la técnica de cultivo', df['Técnica de Cultivo'].unique())
 
-# Crear un gráfico de dispersión (Volumen de Producción vs Edad)
-fig1 = px.scatter(filtered_df, x="Edad", y="Volumen de Producción", color="Técnica de Cultivo",
-                  hover_name="Campesino Asociado", title=f"Volumen de Producción vs Edad del {filtro_seleccionado}")
+# Filtrar los datos según los sliders seleccionados
+filtered_df = df[(df['Género'] == genero_seleccionado) & (df['Técnica de Cultivo'] == tecnica_seleccionada)]
 
-# Crear un gráfico de barras (Técnica de Cultivo vs Volumen de Producción)
-fig2 = px.bar(filtered_df, x="Técnica de Cultivo", y="Volumen de Producción", color="Técnica de Cultivo",
-              title=f"Volumen de Producción por Técnica de Cultivo ({filtro_seleccionado})")
+# Gráfico de torta (pie chart) para la distribución de género
+fig1 = px.pie(df, names="Género", title="Distribución de Género", hole=0.3)
 
-# Crear un gráfico de dispersión (Volumen de Producción vs Año)
-fig3 = px.scatter(df, x="Año", y="Volumen de Producción", color="Técnica de Cultivo",
-                  title="Volumen de Producción por Año", labels={"Año": "Año de Producción"})
+# Gráfico de barras para la distribución de edad
+fig2 = px.bar(filtered_df, x="Edad", y="Volumen de Producción", title="Distribución de Edad vs Volumen de Producción")
 
-# Crear una fila de columnas para los gráficos de barras
-col1, col2 = st.columns(2)
+# Gráfico de barras para la distribución de producción por técnica de cultivo
+fig3 = px.bar(filtered_df, x="Técnica de Cultivo", y="Volumen de Producción", title="Volumen de Producción por Técnica de Cultivo")
 
-# Mostrar los gráficos de barras en las dos columnas
-with col1:
-    st.plotly_chart(fig2, use_container_width=True)
-
-with col2:
-    st.plotly_chart(fig3, use_container_width=True)
-
-# Mostrar el gráfico de dispersión (Volumen de Producción vs Edad) debajo
+# Mostrar los gráficos
 st.plotly_chart(fig1, use_container_width=True)
+st.plotly_chart(fig2, use_container_width=True)
+st.plotly_chart(fig3, use_container_width=True)
+
 
 
