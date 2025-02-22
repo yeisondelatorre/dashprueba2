@@ -23,11 +23,8 @@ df = pd.DataFrame(data)
 # Título de la aplicación
 st.title("📊 Dashboard de Producción Agrícola")
 
-# Crear un filtro en el sidebar para seleccionar un año
-selected_year = st.sidebar.slider("Selecciona un Año:", int(df["Año"].min()), int(df["Año"].max()), int(df["Año"].min()))
-
-# Filtrar los datos según el año seleccionado
-filtered_df = df[df["Año"] == selected_year]
+# Usar todos los datos (sin filtro de año)
+filtered_df = df
 
 # Crear un gráfico de dispersión
 fig1 = px.scatter(filtered_df, x="Edad", y="Volumen de Producción", color="Técnica de Cultivo",
@@ -45,3 +42,4 @@ fig3 = px.bar(df.groupby("Género").agg({"Volumen de Producción": "mean"}).rese
 st.plotly_chart(fig1, use_container_width=True)
 st.plotly_chart(fig2, use_container_width=True)
 st.plotly_chart(fig3, use_container_width=True)
+
